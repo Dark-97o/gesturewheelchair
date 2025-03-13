@@ -3,8 +3,16 @@
 #include <RF24.h>
 #include  <RF24_config.h>
 #include <SPI.h>   
-#include "RF24.h"    
+#include "RF24.h"   
+#include <servo.h> 
 
+#define TRIG_PIN 9   // Trigger pin of ultrasonic sensor
+#define ECHO_PIN 10  // Echo pin of ultrasonic sensor
+#define SAFE_DISTANCE 20  // Distance in cm to trigger brakes
+
+Servo l_brake;
+Servo r_brake;
+Servo seat;
 
 const  int enbA = 3;
 const int enbB = 5;
@@ -25,6 +33,13 @@ RF24 radio(9,10);
 const uint64_t  pipe = 0xE8E8F0F0E1LL;
 
 void setup(){
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT); 
+  l_brake.attach(8);
+  r_brake.attach(9);
+  seat.attach(10);
+  releaseBrakes();
+
   pinMode(enbA, OUTPUT);
   pinMode(enbB, OUTPUT);
   pinMode(IN1, OUTPUT);
@@ -36,7 +51,19 @@ void setup(){
   radio.begin();                               
   radio.openReadingPipe(1, pipe);
   radio.startListening();             
-  }
+}
+
+long getDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  
+  long duration = pulseIn(ECHO_PIN, HIGH);
+  long distance = duration * 0.034 / 2;  // Convert time to distance (cm)
+  return distance;
+}
 
 void loop(){
   if (radio.available()){
@@ -83,4 +110,33 @@ void loop(){
       analogWrite(enbB,  0);
     }
   }
+
+  while(Serial.available() > 0){
+    char val = Serial.read();
+    if(val == 'b'){
+      brake();
+      delay(200);
+    }
+    if(val == 's'){
+      seat_up();
+      delay(200);
+    }
+  }
+}
+
+void applyBrakes() {
+  l_brake.write(90);   
+  r_brake.write(90);  
+  Serial.println("Brakes Applied!");
+}
+
+void releaseBrakes() {
+  l_brake.write(0);  
+  r_brake.write(0);
+  Serial.println("Brakes Released!");
+
+void seat_up(){
+  seat.write(180);
+  delay(1000);
+  seat.write(90);
 }
