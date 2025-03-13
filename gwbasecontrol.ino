@@ -113,27 +113,43 @@ void loop(){
 
   while(Serial.available() > 0){
     char val = Serial.read();
-    if(val == 'b'){
-      brake();
+    if(val == 'a'){
+      applyBrakes();
       delay(200);
     }
     if(val == 's'){
       seat_up();
       delay(200);
     }
+    if(val == 'r'){
+      releaseBrakes();
+      delay(200);
+    }
+    if(val == 'b'){
+      brakes();
+      delay(200);
+    }
+  }
+
+}
+
+void brakes(){
+  long distance = getDistance();
+  if(distance < SAFE_DISTANCE){
+    applyBrakes();
+  } else {
+    releaseBrakes();
   }
 }
 
 void applyBrakes() {
   l_brake.write(90);   
   r_brake.write(90);  
-  Serial.println("Brakes Applied!");
 }
 
 void releaseBrakes() {
   l_brake.write(0);  
   r_brake.write(0);
-  Serial.println("Brakes Released!");
 
 void seat_up(){
   seat.write(180);
