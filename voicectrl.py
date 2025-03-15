@@ -42,15 +42,15 @@ def listen():
 def process(words):
 	print(words)
 	word_list = words.split(' ')[1:]
-	if word_list[0] == 'uppercut':
+	if word_list[0] == 'up':
 		port.write(b'U')
 
-	elif word_list[0] == 'smash':
+	elif word_list[0] == 'down':
 		port.write(b's')
 
-	elif word_list[0] == 'punch':
+	elif word_list[0] == 'forward':
 		port.write(b'p')
-
+		
 	for word in word_list:
 		if word in hi_words_u:
 			port.write(b'h')
@@ -59,8 +59,7 @@ def process(words):
 		elif word in bye_words_u:
 			talk(random.choice(bye_words))
 			port.write(b'h')
-
-
+			
 def talk(sentence):
 	engine.say(sentence)
 	engine.runAndWait()
