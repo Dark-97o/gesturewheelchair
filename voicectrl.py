@@ -7,17 +7,16 @@ import pywhatkit
 
 robot_name = 'control'
 
-hi_words_u = ['hi', 'hello', 'namaskar']
-bye_words_u = ['bye', 'tata', 'alvida']
-hi_words = ['hi there', 'hello there', 'whats up boss']
-bye_words = ['bye bye', 'cya' , 'sayonara']
-r_u_there = ['are you there', 'you there']
+hi_words_u = ['hi', 'hello']
+bye_words_u = ['bye', 'tata']
+hi_words = ['hi there', 'hello there', 'whats up']
+bye_words = ['bye', 'see you']
 
-engine = pyttsx3.init()                    # Text to speech engine
-voices = engine.getProperty('voices')      # Check library for voices
-engine.setProperty('voice', voices[0].id)  # 0-Male\1-Female
-engine.setProperty('rate', 150)            # Voice rate 
-listener = sr.Recognizer()                 # Speech recognition
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)  
+engine.setProperty('rate', 150)            
+listener = sr.Recognizer()                
 
 try:
     port = serial.Serial("COM5",9600)
