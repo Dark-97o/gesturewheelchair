@@ -129,6 +129,10 @@ void loop(){
       brakes();
       delay(200);
     }
+    if(val == 'd'){
+      seat_down();
+      delay(200);
+    }
   }
 
 }
@@ -153,6 +157,10 @@ void releaseBrakes() {
 
 void seat_up(){
   seat.write(180);
-  delay(1000);
-  seat.write(90);
+  delay(200);
+}
+
+void seat_down(){
+  seat.write(0);
+  delay(200);
 }
