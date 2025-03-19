@@ -29,5 +29,8 @@ A wheelchair controlled by gestures and voice commands, utilizing RF communicati
   - "control down" to move the wheelchair backward.
   - "control forward" to stop the wheelchair.
 
+## Authors
+- Subhranil Baul
+
 ## License
 This project is licensed under the MIT License.
